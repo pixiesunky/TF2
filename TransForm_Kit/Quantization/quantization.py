@@ -23,10 +23,9 @@ import sys, os
 
 def QuantizeLinear(x):
     Max = torch.max(abs(x))
-    Limiter = pow(2,n-1) - 1
     scale = 1
     if Max != 0:
-        scale = torch.round(Limiter/Max)
+        scale = torch.round(127/Max)
     return (scale)
 
 def QuantizeForShift(x):
@@ -70,11 +69,11 @@ def QuantizeChannel(style, x):
         scale_list = []
         if len(shape) == 1:
             for i in range(x.shape[0]):
-                scale = QuantizeLinear(x[i], n)
+                scale = QuantizeLinear(x[i])
                 scale_list.append(scale)
         else:
             for i in range(x.shape[1]):
-                scale = QuantizeLinear(x[i], n)
+                scale = QuantizeLinear(x[i])
                 scale_list.append(scale)
         return (scale_list)
 
